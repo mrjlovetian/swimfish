@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <title>水波背景</title>
+ <meta charset="gb2312" />
+ <style>
+ html, body {width:100%; height:100%; padding:0; margin:0;}
+ </style>
+ <link rel="stylesheet" href="css/style.css">
+</head>
+<body id="bigbody">
+ <canvas id="canvas" style="position:absolute;top:0px;left:0px;z-index:1;"></canvas>
+ <!-- fish -->
+ <div class="fish">
+    <div class="tail"></div>
+    <div class="fins">
+        <div class="top"></div>
+        <div class="bottom"></div>
+        <div class="bottom"></div>
+    </div>
+    <div class="body"></div>
+    <div class="side"></div>
+    <div class="eye"></div>
+    <div class="bubbles">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+</div>
+
+ <script type="text/javascript">
+
+    let index = 1
+    let timeinter = setInterval(() => {
+        if (index > 8) {
+            clearInterval(timeinter)
+        }
+        let fish = document.createElement('div')
+        fish.setAttribute('class', 'fish')
+        let tail = document.createElement('div')
+        tail.setAttribute('class', 'tail')
+        fish.appendChild(tail)
+        let fins = document.createElement('div')
+        fins.setAttribute('class', 'fins')
+        fish.appendChild(fins)
+        let top = document.createElement('div')
+        top.setAttribute('class', 'top')
+        fins.appendChild(top)
+        let bottom1 = document.createElement('div')
+        bottom1.setAttribute('class', 'bottom')
+        fins.appendChild(bottom1)
+        let bottom2 = document.createElement('div')
+        bottom2.setAttribute('class', 'bottom')        
+        let body = document.createElement('div')
+        body.setAttribute('class', 'body')
+        fish.appendChild(body)
+        let side = document.createElement('div')
+        side.setAttribute('class', 'side')
+        fish.appendChild(side)
+        let eye = document.createElement('div')
+        eye.setAttribute('class', 'eye')
+        fish.appendChild(eye)
+        let bubbles = document.createElement('div')
+        bubbles.setAttribute('class', 'bubbles')
+        fish.appendChild(bubbles)
+        let bubble1 = document.createElement('div')
+        bubble1.setAttribute('class', 'bubble')
+        let bubble2 = document.createElement('div')
+        bubble2.setAttribute('class', 'bubble')
+        let bubble3 = document.createElement('div')
+        bubble3.setAttribute('class', 'bubble')
+        let bubble4 = document.createElement('div')
+        bubble4.setAttribute('class', 'bubble')
+        bubbles.appendChild(bubble1)
+        bubbles.appendChild(bubble2)
+        bubbles.appendChild(bubble3)
+        bubbles.appendChild(bubble4)
+        document.getElementById('bigbody').appendChild(fish)
+        fish.style.setProperty('top', 10 + (index + 0.8)*10 + '%', 'important');
+        index ++
+    }, 8000);
+
+  var canvas = document.getElementById('canvas'); 
+  var ctx = canvas.getContext('2d'); 
+  canvas.width = canvas.parentNode.offsetWidth; 
+  canvas.height = canvas.parentNode.offsetHeight;
+  //如果浏览器支持requestAnimFrame则使用requestAnimFrame否则使用setTimeout 
+  window.requestAnimFrame = (function(){ 
+  return window.requestAnimationFrame  || 
+    window.webkitRequestAnimationFrame || 
+    window.mozRequestAnimationFrame || 
+    function( callback ){ 
+     window.setTimeout(callback, 1000 / 60); 
+    }; 
+  })(); 
+  // 波浪大小
+  var boHeight = canvas.height / 20;
+  var posHeight = canvas.height / 2.2;
+  //初始角度为0 
+  var step = 0; 
+  //定义三条不同波浪的颜色 
+  var lines = ["rgba(0,222,255, 0.2)", 
+      "rgba(157,192,249, 0.2)", 
+      "rgba(0,168,255, 0.2)"]; 
+  function loop(){ 
+   ctx.clearRect(0,0,canvas.width,canvas.height); 
+   step++; 
+   //画3个不同颜色的矩形 
+   for(var j = lines.length - 1; j >= 0; j--) { 
+    ctx.fillStyle = lines[j]; 
+    //每个矩形的角度都不同，每个之间相差45度 
+    var angle = (step+j*45)*Math.PI/180; 
+    var deltaHeight = Math.sin(angle) * boHeight;
+    var deltaHeightRight = Math.cos(angle) * boHeight; 
+    ctx.beginPath();
+    ctx.moveTo(0, posHeight+deltaHeight); 
+    ctx.bezierCurveTo(canvas.width/2, posHeight+deltaHeight-boHeight, canvas.width / 2, posHeight+deltaHeightRight-boHeight, canvas.width, posHeight+deltaHeightRight); 
+    ctx.lineTo(canvas.width, canvas.height); 
+    ctx.lineTo(0, canvas.height); 
+    ctx.lineTo(0, posHeight+deltaHeight); 
+    ctx.closePath(); 
+    ctx.fill(); 
+   }
+   requestAnimFrame(loop);
+  } 
+  loop(); 
+ </script>
+</body>
+</html>
